@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+
+:root {
+  --color-primary: #12182A;
+  --color-danger: #BA5555;
+  /* Updated Red */
+  --color-success: #598468;
+  /* Updated Green */
+  --color-text: #12182A;
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-border: #bbbbbb;
+
+  --font-base: 20px;
+  --font-family: "Bricolage Grotesque", sans-serif;
+  --radius-md: 12px;
+  --spacing-md: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-base);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 16px 0;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+p {
+  margin: 0 0 10px 0;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  font-family: var(--font-family);
+  font-size: inherit;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+button {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  min-height: 48px;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 600;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+/* Primary Button (Solid Dark Blue) */
+button.primary {
+  background-color: var(--color-primary);
+  color: white;
+  border: 2px solid var(--color-primary);
+}
+
+button.primary:hover {
+  opacity: 0.9;
+}
+
+/* Secondary Button (Gray) */
+button.secondary {
+  background-color: #e5e7eb;
+  color: #1f2937;
+  border: 2px solid #e5e7eb;
+}
+
+button.secondary:hover {
+  filter: brightness(0.95);
+}
+
+/* Custom Solid Buttons (Requested Update) */
+/* Copy Button - Green #598468 */
+button.btn-copy {
+  background-color: var(--color-success);
+  color: white;
+  border: 2px solid var(--color-success);
+}
+
+button.btn-copy:hover {
+  opacity: 0.9;
+}
+
+/* Delete Button - Red #BA5555 */
+button.btn-delete {
+  background-color: var(--color-danger);
+  color: white;
+  border: 2px solid var(--color-danger);
+}
+
+button.btn-delete:hover {
+  opacity: 0.9;
+}
+
+/* Edit Button - Default Primary (Dark Blue) */
+button.btn-edit {
+  background-color: var(--color-primary);
+  color: white;
+  border: 2px solid var(--color-primary);
+}
+
+button.btn-edit:hover {
+  opacity: 0.9;
+}
+
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+}
+
+/* Header */
+.app-header {
+  background-color: #12182A;
+  color: white;
+  padding: 24px 0;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: white;
+}
+
+.app-header p {
+  margin: 4px 0 0 0;
+  opacity: 0.8;
+}
+
+/* Navigation */
+.nav-container {
+  background: white;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: block;
+}
+
+/* .nav-container > div is the flex container now */
+
+.nav-pill {
+  background: white;
+  color: #12182A;
+  border: 1px solid transparent;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.nav-pill:hover {
+  background: #f3f4f6;
+}
+
+.nav-pill.active {
+  background: #12182A;
+  color: white;
+  border-radius: 8px;
+}
+
+/* Utilities */
+.flex {
+  display: flex;
+  gap: 16px;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.empty-state h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+.empty-state p {
+  color: #6b7280;
+  margin-bottom: 24px;
+  font-size: 1rem;
+}

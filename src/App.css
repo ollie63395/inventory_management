@@ -1,0 +1,49 @@
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.nav-bar {
+  display: flex;
+  background-color: var(--color-primary-dark);
+  padding: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.nav-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 1.1rem;
+  padding: 12px;
+  border-bottom: 4px solid transparent;
+  border-radius: 0;
+  min-height: 60px;
+}
+
+.nav-btn.active {
+  color: white;
+  border-bottom-color: var(--color-success);
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: bold;
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* On very small screens (Mobile portrait), maybe move nav to bottom? */
+@media (max-width: 600px) {
+  .nav-bar {
+    top: auto;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    padding: 0;
+  }
+}
