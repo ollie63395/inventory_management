@@ -40,11 +40,18 @@ const HistoryViewer = () => {
     };
 
     const calculateStats = (product, history) => {
-        const totalSold = history.reduce((sum, t) => {
+        const stats = history.reduce((acc, t) => {
             const item = t.items.find(i => i.id === product.id);
-            return sum + (item ? item.buyQty : 0);
-        }, 0);
-        return { totalSold };
+            if (!item) return acc;
+
+            if (t.type === 'import') {
+                acc.totalImported += item.buyQty;
+            } else {
+                acc.totalSold += item.buyQty;
+            }
+            return acc;
+        }, { totalSold: 0, totalImported: 0 });
+        return stats;
     };
 
     const formatDate = (dateString) => {
@@ -105,11 +112,17 @@ const HistoryViewer = () => {
                                         >
                                             <div>
                                                 <div style={{ fontSize: '1.2rem', color: '#111' }}>{formatDate(t.date)}</div>
-                                                <div><strong>Khách:</strong> {t.customerName}</div>
+                                                <div>
+                                                    {t.type === 'import' ? (
+                                                        <span style={{ color: 'green', fontWeight: 'bold' }}>📦 Nhập hàng</span>
+                                                    ) : (
+                                                        <span><strong>Khách:</strong> {t.customerName}</span>
+                                                    )}
+                                                </div>
                                             </div>
                                             <div style={{ textAlign: 'right' }}>
-                                                <div style={{ fontWeight: 'bold', color: 'var(--color-primary)' }}>
-                                                    {t.items.length} món
+                                                <div style={{ fontWeight: 'bold', color: t.type === 'import' ? 'green' : 'var(--color-primary)' }}>
+                                                    {t.type === 'import' ? '+' : ''}{t.items.length} món
                                                 </div>
                                             </div>
                                         </div>
@@ -124,7 +137,7 @@ const HistoryViewer = () => {
             {/* Product Detail View */}
             {selectedProduct && (() => {
                 const history = getProductHistory(selectedProduct.id);
-                const { totalSold } = calculateStats(selectedProduct, history);
+                const { totalSold, totalImported } = calculateStats(selectedProduct, history);
 
                 return (
                     <div className="detail-view">
@@ -154,10 +167,16 @@ const HistoryViewer = () => {
                                         {totalSold} {selectedProduct.unit}
                                     </p>
                                 </div>
+                                <div>
+                                    <p className="text-primary" style={{ fontSize: '0.9rem', color: 'green' }}>Đã nhập thêm</p>
+                                    <p style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'green' }}>
+                                        {totalImported} {selectedProduct.unit}
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
-                        <h3>Lịch sử bán hàng ({history.length})</h3>
+                        <h3>Lịch sử giao dịch ({history.length})</h3>
                         <div className="history-list">
                             {history.map(t => {
                                 const item = t.items.find(i => i.id === selectedProduct.id);
@@ -165,10 +184,12 @@ const HistoryViewer = () => {
                                     <div key={t.id} className="card flex justify-between items-center" onClick={() => setViewTransaction(t)} style={{ cursor: 'pointer' }}>
                                         <div>
                                             <div style={{ fontSize: '1.1rem', marginBottom: '4px' }}>{formatDate(t.date)}</div>
-                                            <div style={{ color: '#555' }}>Khách: {t.customerName}</div>
+                                            <div style={{ color: '#555' }}>
+                                                {t.type === 'import' ? '📦 Nhập kho' : `Khách: ${t.customerName}`}
+                                            </div>
                                         </div>
-                                        <div style={{ textAlign: 'right', color: 'red', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                                            -{item.buyQty} {selectedProduct.unit}
+                                        <div style={{ textAlign: 'right', color: t.type === 'import' ? 'green' : 'red', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                                            {t.type === 'import' ? '+' : '-'}{item.buyQty} {selectedProduct.unit}
                                         </div>
                                     </div>
                                 );
@@ -182,7 +203,7 @@ const HistoryViewer = () => {
             {/* Transaction Detail Modal */}
             <Modal
                 isOpen={!!viewTransaction}
-                title="Chi Tiết Đơn Hàng"
+                title={viewTransaction?.type === 'import' ? "Chi Tiết Nhập Kho" : "Chi Tiết Đơn Hàng"}
                 onClose={() => setViewTransaction(null)}
                 actions={<button className="primary" onClick={() => setViewTransaction(null)}>Đóng</button>}
             >
@@ -193,10 +214,12 @@ const HistoryViewer = () => {
                                 <strong style={{ minWidth: '80px' }}>Thời gian:</strong>
                                 {formatDate(viewTransaction.date)}
                             </p>
-                            <p style={{ marginTop: '8px' }}><strong>Khách hàng:</strong> {viewTransaction.customerName}</p>
+                            {viewTransaction.type !== 'import' && (
+                                <p style={{ marginTop: '8px' }}><strong>Khách hàng:</strong> {viewTransaction.customerName}</p>
+                            )}
                         </div>
 
-                        <h4 style={{ marginBottom: '12px' }}>Danh sách sản phẩm:</h4>
+                        <h4 style={{ marginBottom: '12px' }}>{viewTransaction.type === 'import' ? 'Sản phẩm nhập:' : 'Danh sách sản phẩm:'}</h4>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {viewTransaction.items.map((item, idx) => (
                                 <div key={idx} className="flex justify-between" style={{ padding: '8px', background: '#f9fafb', borderRadius: '8px' }}>

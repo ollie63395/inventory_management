@@ -48,10 +48,15 @@ export const storage = {
 
   // Transactions
   getTransactions: () => getJSON(KEYS.TRANSACTIONS, []),
-  addTransaction: (transaction) => {
+  logTransaction: (transaction) => {
+    // transaction structure: { id, date, type: 'sale' | 'import', customerName (optional), items: [] }
     const transactions = getJSON(KEYS.TRANSACTIONS, []);
     transactions.unshift(transaction); // Newest first
     setJSON(KEYS.TRANSACTIONS, transactions);
+  },
+  // Deprecated alias for backward compatibility or refactor usage
+  addTransaction: (transaction) => {
+    storage.logTransaction({ ...transaction, type: 'sale' });
   },
 
   // Units
