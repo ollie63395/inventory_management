@@ -222,7 +222,7 @@ const ProductManager = () => {
                     <div key={p.id} className="card flex" style={{ padding: 0, overflow: 'hidden', alignItems: 'stretch' }}>
                         {/* Full Height Image - Left Side */}
                         {p.image && (
-                            <div style={{ width: '140px', flexShrink: 0, borderRight: '1px solid #eee' }}>
+                            <div style={{ width: '240px', flexShrink: 0, borderRight: '1px solid #eee' }}>
                                 <img
                                     src={p.image}
                                     alt={p.name}

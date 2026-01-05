@@ -122,7 +122,7 @@ const HistoryViewer = () => {
                                             </div>
                                             <div style={{ textAlign: 'right' }}>
                                                 <div style={{ fontWeight: 'bold', color: t.type === 'import' ? 'green' : 'var(--color-primary)' }}>
-                                                    {t.type === 'import' ? '+' : ''}{t.items.length} món
+                                                    {t.type === 'import' ? '+ ' : ''}{t.items.length} món
                                                 </div>
                                             </div>
                                         </div>
@@ -145,7 +145,7 @@ const HistoryViewer = () => {
                             ⬅ <text style={{ marginLeft: '8px' }}>Quay lại tìm kiếm</text>
                         </button>
 
-                        <div className="card" style={{ backgroundColor: '#f3f4f6', border: '2px solid var(--color-primary)' }}>
+                        <div className="card" style={{ backgroundColor: '#f3f4f6', border: '2px solid var(--color-primary)', marginBottom: '36px', marginTop: '16px' }}>
                             <h2 style={{ color: 'var(--color-primary)', marginBottom: '16px' }}>{selectedProduct.name}</h2>
 
                             <div className="flex" style={{ flexWrap: 'wrap', gap: '32px' }}>
@@ -157,7 +157,7 @@ const HistoryViewer = () => {
                                 </div>
                                 <div>
                                     <p className="text-primary" style={{ fontSize: '0.9rem' }}>Số lượng hiện tại</p>
-                                    <p style={{ fontSize: '1.8rem', fontWeight: 'bold', color: selectedProduct.quantity < 10 ? 'red' : 'green' }}>
+                                    <p style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'green' }}>
                                         {selectedProduct.quantity} {selectedProduct.unit}
                                     </p>
                                 </div>
@@ -168,7 +168,7 @@ const HistoryViewer = () => {
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-primary" style={{ fontSize: '0.9rem', color: 'green' }}>Đã nhập thêm</p>
+                                    <p className="text-primary" style={{ fontSize: '0.9rem' }}>Đã nhập thêm</p>
                                     <p style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'green' }}>
                                         {totalImported} {selectedProduct.unit}
                                     </p>
@@ -188,8 +188,8 @@ const HistoryViewer = () => {
                                                 {t.type === 'import' ? '📦 Nhập kho' : `Khách: ${t.customerName}`}
                                             </div>
                                         </div>
-                                        <div style={{ textAlign: 'right', color: t.type === 'import' ? 'green' : 'red', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                                            {t.type === 'import' ? '+' : '-'}{item.buyQty} {selectedProduct.unit}
+                                        <div style={{ textAlign: 'right', color: t.type === 'import' ? 'green' : 'var(--color-primary)', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                                            {t.type === 'import' ? '+ ' : '- '}{item.buyQty} {selectedProduct.unit}
                                         </div>
                                     </div>
                                 );
@@ -211,7 +211,6 @@ const HistoryViewer = () => {
                     <div>
                         <div style={{ marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid #eee' }}>
                             <p style={{ display: 'flex', alignItems: 'center' }}>
-                                <strong style={{ minWidth: '80px' }}>Thời gian:</strong>
                                 {formatDate(viewTransaction.date)}
                             </p>
                             {viewTransaction.type !== 'import' && (
