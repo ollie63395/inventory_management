@@ -15,7 +15,7 @@ const SalesCounter = ({ setIsDirty }) => {
     // Product Selection State
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [qtyInput, setQtyInput] = useState(1);
+    const [qtyInput, setQtyInput] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
 
     const addToast = useToast();
@@ -45,12 +45,14 @@ const SalesCounter = ({ setIsDirty }) => {
     const addToCart = () => {
         if (!selectedProduct) return;
 
-        if (qtyInput <= 0) {
+        const quantityToAdd = qtyInput === '' ? 0 : qtyInput;
+
+        if (quantityToAdd <= 0) {
             setErrorMsg('Số lượng phải lớn hơn 0');
             return;
         }
 
-        if (qtyInput > selectedProduct.quantity) {
+        if (quantityToAdd > selectedProduct.quantity) {
             setErrorMsg(`Không đủ hàng! Kho chỉ còn ${selectedProduct.quantity} ${selectedProduct.unit}`);
             return;
         }
@@ -62,21 +64,21 @@ const SalesCounter = ({ setIsDirty }) => {
         if (existingItemIndex >= 0) {
             // Update quantity if total doesn't exceed stock
             const currentQtyInCart = newCart[existingItemIndex].buyQty;
-            if (currentQtyInCart + qtyInput > selectedProduct.quantity) {
+            if (currentQtyInCart + quantityToAdd > selectedProduct.quantity) {
                 setErrorMsg(`Không đủ hàng! Tổng mua vượt quá tồn kho (${selectedProduct.quantity})`);
                 return;
             }
-            newCart[existingItemIndex].buyQty += qtyInput;
+            newCart[existingItemIndex].buyQty += quantityToAdd;
         } else {
-            newCart.push({ ...selectedProduct, buyQty: qtyInput });
+            newCart.push({ ...selectedProduct, buyQty: quantityToAdd });
         }
 
         setCart(newCart);
         setSelectedProduct(null);
-        setQtyInput(1);
+        setQtyInput('');
         setErrorMsg('');
         setSearchTerm(''); // Reset search to allow quick next pick
-        addToast(`Đã thêm ${qtyInput} ${selectedProduct.unit} vào giỏ`, 'success');
+        addToast(`Đã thêm ${quantityToAdd} ${selectedProduct.unit} vào giỏ`, 'success');
     };
 
     const removeFromCart = (index) => {
@@ -199,7 +201,7 @@ const SalesCounter = ({ setIsDirty }) => {
                         <input
                             type="number"
                             value={qtyInput}
-                            onChange={e => setQtyInput(parseInt(e.target.value))}
+                            onChange={e => setQtyInput(e.target.value === '' ? '' : parseInt(e.target.value))}
                             style={{ fontSize: '24px', fontWeight: 'bold' }}
                             autoFocus
                         />

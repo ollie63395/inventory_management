@@ -47,6 +47,17 @@ const HistoryViewer = () => {
         return { totalSold };
     };
 
+    const formatDate = (dateString) => {
+        const dateObj = new Date(dateString);
+        const date = dateObj.toLocaleDateString('vi-VN');
+        const time = dateObj.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        return (
+            <span>
+                <strong>Ngày:</strong> {date} • <strong>Giờ:</strong> {time}
+            </span>
+        );
+    };
+
     return (
         <div>
             <h1>🔍 Tìm Kiếm & Lịch Sử</h1>
@@ -93,8 +104,8 @@ const HistoryViewer = () => {
                                             style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                                         >
                                             <div>
-                                                <div style={{ fontWeight: 'bold' }}>{new Date(t.date).toLocaleString()}</div>
-                                                <div>Khách: {t.customerName}</div>
+                                                <div style={{ fontSize: '1.2rem', color: '#111' }}>{formatDate(t.date)}</div>
+                                                <div><strong>Khách:</strong> {t.customerName}</div>
                                             </div>
                                             <div style={{ textAlign: 'right' }}>
                                                 <div style={{ fontWeight: 'bold', color: 'var(--color-primary)' }}>
@@ -153,7 +164,7 @@ const HistoryViewer = () => {
                                 return (
                                     <div key={t.id} className="card flex justify-between items-center" onClick={() => setViewTransaction(t)} style={{ cursor: 'pointer' }}>
                                         <div>
-                                            <strong>{new Date(t.date).toLocaleString()}</strong>
+                                            <div style={{ fontSize: '1.1rem', marginBottom: '4px' }}>{formatDate(t.date)}</div>
                                             <div style={{ color: '#555' }}>Khách: {t.customerName}</div>
                                         </div>
                                         <div style={{ textAlign: 'right', color: 'red', fontWeight: 'bold', fontSize: '1.2rem' }}>
@@ -178,8 +189,11 @@ const HistoryViewer = () => {
                 {viewTransaction && (
                     <div>
                         <div style={{ marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid #eee' }}>
-                            <p><strong>Ngày bán:</strong> {new Date(viewTransaction.date).toLocaleString()}</p>
-                            <p><strong>Khách hàng:</strong> {viewTransaction.customerName}</p>
+                            <p style={{ display: 'flex', alignItems: 'center' }}>
+                                <strong style={{ minWidth: '80px' }}>Thời gian:</strong>
+                                {formatDate(viewTransaction.date)}
+                            </p>
+                            <p style={{ marginTop: '8px' }}><strong>Khách hàng:</strong> {viewTransaction.customerName}</p>
                         </div>
 
                         <h4 style={{ marginBottom: '12px' }}>Danh sách sản phẩm:</h4>

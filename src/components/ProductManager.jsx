@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { storage } from '../utils/storage';
 import Modal from './Modal';
 import { useToast } from './Toast';
-import { Plus, PackageOpen, Edit2, Copy, Trash2, Search } from 'lucide-react';
+import { Plus, PackageOpen, Edit2, Copy, Trash2, Search, ChevronDown } from 'lucide-react';
 
 const ProductManager = () => {
     const [products, setProducts] = useState([]);
@@ -11,11 +11,12 @@ const ProductManager = () => {
         id: '',
         name: '',
         unit: 'Cái',
-        quantity: 0,
+        quantity: '',
         initialQuantity: 0,
         image: ''
     });
     const [searchTerm, setSearchTerm] = useState('');
+    const [sortBy, setSortBy] = useState('name'); // 'name', 'recent', 'quantity-desc', 'quantity-asc'
 
     // Delete Modal State
     const [units, setUnits] = useState([]);
@@ -35,7 +36,7 @@ const ProductManager = () => {
     };
 
     const resetForm = () => {
-        setFormData({ id: '', name: '', unit: '', quantity: 0, initialQuantity: 0, image: '' });
+        setFormData({ id: '', name: '', unit: '', quantity: '', initialQuantity: 0, image: '' });
         setShowForm(false);
     };
 
@@ -43,6 +44,8 @@ const ProductManager = () => {
         e.preventDefault();
 
         let newProduct = { ...formData };
+        // Ensure quantity is a number efficiently
+        if (newProduct.quantity === '') newProduct.quantity = 0;
 
         if (!newProduct.id) {
             newProduct.id = Date.now().toString();
@@ -93,7 +96,14 @@ const ProductManager = () => {
 
     const filteredProducts = products.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    ).sort((a, b) => {
+        if (sortBy === 'name') return a.name.localeCompare(b.name);
+        if (sortBy === 'name-desc') return b.name.localeCompare(a.name);
+        if (sortBy === 'recent') return b.id - a.id;
+        if (sortBy === 'quantity-desc') return b.quantity - a.quantity;
+        if (sortBy === 'quantity-asc') return a.quantity - b.quantity;
+        return 0;
+    });
 
     return (
         <div>
@@ -108,6 +118,40 @@ const ProductManager = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         style={{ marginBottom: 0, width: '100%', paddingLeft: '40px' }}
+                    />
+                </div>
+
+                <div style={{ marginRight: '16px', position: 'relative' }}>
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        style={{
+                            height: '100%',
+                            marginBottom: 0,
+                            paddingLeft: '12px',
+                            paddingRight: '40px',
+                            appearance: 'none',
+                            WebkitAppearance: 'none',
+                            MozAppearance: 'none',
+                            backgroundColor: 'white'
+                        }}
+                    >
+                        <option value="name">Tên (A-Z)</option>
+                        <option value="name-desc">Tên (Z-A)</option>
+                        <option value="recent">Mới tạo nhất</option>
+                        <option value="quantity-desc">Số lượng (Cao - Thấp)</option>
+                        <option value="quantity-asc">Số lượng (Thấp - Cao)</option>
+                    </select>
+                    <ChevronDown
+                        size={16}
+                        style={{
+                            position: 'absolute',
+                            right: '12px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            pointerEvents: 'none',
+                            color: '#222'
+                        }}
                     />
                 </div>
 
@@ -273,7 +317,7 @@ const ProductManager = () => {
                     <input
                         type="number"
                         value={formData.quantity}
-                        onChange={e => setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 })}
+                        onChange={e => setFormData({ ...formData, quantity: e.target.value === '' ? '' : parseInt(e.target.value) })}
                     />
                 </form>
             </Modal>
