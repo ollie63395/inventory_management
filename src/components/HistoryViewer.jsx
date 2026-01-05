@@ -88,10 +88,15 @@ const HistoryViewer = () => {
                                 key={p.id}
                                 className="card"
                                 onClick={() => handleProductSelect(p)}
-                                style={{ cursor: 'pointer', border: '1px solid #ddd' }}
+                                style={{ cursor: 'pointer', border: '1px solid #ddd', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                             >
-                                <h3>{p.name}</h3>
-                                <p>Kho hiện tại: <strong>{p.quantity}</strong> {p.unit}</p>
+                                <div>
+                                    <h3>{p.name}</h3>
+                                    <p>Kho hiện tại: <strong>{p.quantity}</strong> {p.unit}</p>
+                                </div>
+                                {p.image && (
+                                    <img src={p.image} alt={p.name} style={{ width: '120px', height: '120px', objectFit: 'cover', borderRadius: '4px' }} />
+                                )}
                             </div>
                         ))}
                         {searchTerm && filteredProducts.length === 0 && <p className="text-center">Không tìm thấy sản phẩm nào.</p>}
@@ -146,33 +151,44 @@ const HistoryViewer = () => {
                         </button>
 
                         <div className="card" style={{ backgroundColor: '#f3f4f6', border: '2px solid var(--color-primary)', marginBottom: '36px', marginTop: '16px' }}>
-                            <h2 style={{ color: 'var(--color-primary)', marginBottom: '16px' }}>{selectedProduct.name}</h2>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                <div style={{ flex: 1 }}>
+                                    <h2 style={{ color: 'var(--color-primary)', marginBottom: '16px' }}>{selectedProduct.name}</h2>
 
-                            <div className="flex" style={{ flexWrap: 'wrap', gap: '32px' }}>
-                                <div>
-                                    <p className="text-primary" style={{ fontSize: '0.9rem' }}>Số lượng ban đầu</p>
-                                    <p style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
-                                        {selectedProduct.initialQuantity || selectedProduct.quantity + totalSold} {selectedProduct.unit}
-                                    </p>
+                                    <div className="flex" style={{ flexWrap: 'wrap', gap: '32px' }}>
+                                        <div>
+                                            <p className="text-primary" style={{ fontSize: '0.9rem' }}>Số lượng ban đầu</p>
+                                            <p style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
+                                                {selectedProduct.initialQuantity || selectedProduct.quantity + totalSold} {selectedProduct.unit}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-primary" style={{ fontSize: '0.9rem' }}>Số lượng hiện tại</p>
+                                            <p style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'green' }}>
+                                                {selectedProduct.quantity} {selectedProduct.unit}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-primary" style={{ fontSize: '0.9rem' }}>Đã bán</p>
+                                            <p style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
+                                                {totalSold} {selectedProduct.unit}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-primary" style={{ fontSize: '0.9rem' }}>Đã nhập thêm</p>
+                                            <p style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'green' }}>
+                                                {totalImported} {selectedProduct.unit}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-primary" style={{ fontSize: '0.9rem' }}>Số lượng hiện tại</p>
-                                    <p style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'green' }}>
-                                        {selectedProduct.quantity} {selectedProduct.unit}
-                                    </p>
-                                </div>
-                                <div>
-                                    <p className="text-primary" style={{ fontSize: '0.9rem' }}>Đã bán</p>
-                                    <p style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
-                                        {totalSold} {selectedProduct.unit}
-                                    </p>
-                                </div>
-                                <div>
-                                    <p className="text-primary" style={{ fontSize: '0.9rem' }}>Đã nhập thêm</p>
-                                    <p style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'green' }}>
-                                        {totalImported} {selectedProduct.unit}
-                                    </p>
-                                </div>
+                                {selectedProduct.image && (
+                                    <img
+                                        src={selectedProduct.image}
+                                        alt={selectedProduct.name}
+                                        style={{ width: '200px', height: '200px', objectFit: 'cover', borderRadius: '8px', marginLeft: '16px' }}
+                                    />
+                                )}
                             </div>
                         </div>
 
